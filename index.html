@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<Head
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INSTANT EATS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;700;900&display=swap');
+        
+        :root {
+            --gold-primary: #FFD700;
+            --gold-light: #FFF8DC;
+            --gold-dark: #DAA520;
+            --chrome-light: #E8E8E8;
+            --chrome-dark: #B8B8B8;
+            --black-marble: #0A0A0A;
+            --glass-liquid: rgba(255, 215, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Curseur personnalisé */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, var(--gold-primary), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+        }
+
+        /* Fond liquide ultra premium avec caustics */
+        .liquid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at var(--mouse-x, 20%) var(--mouse-y, 50%), rgba(255, 215, 0, 0.25) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(218, 165, 32, 0.2) 0%, transparent 70%),
+                radial-gradient(ellipse at 40% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                conic-gradient(from 0deg at 50% 50%, 
+                    rgba(255, 215, 0, 0.03) 0deg,
+                    rgba(255, 255, 255, 0.08) 60deg,
+                    rgba(255, 215, 0, 0.05) 120deg,
+                    rgba(232, 232, 232, 0.06) 180deg,
+                    rgba(255, 215, 0, 0.04) 240deg,
+                    rgba(255, 255, 255, 0.07) 300deg,
+                    rgba(255, 215, 0, 0.03) 360deg),
+                linear-gradient(135deg, #000000 0%, #0a0a0a 30%, #151515 50%, #0a0a0a 70%, #000000 100%);
+            animation: liquidFlow 25s ease-in-out infinite, causticWaves 8s ease-in-out infinite;
+            z-index: -1;
+            filter: contrast(1.2) brightness(1.1);
+        }
+
+        @keyframes liquidFlow {
+            0%, 100% {
+                background-position: 0% 50%, 100% 0%, 50% 100%, 0% 0%;
+                filter: hue-rotate(0deg) contrast(1.2) brightness(1.1) saturate(1.3);
+                transform: scale(1) rotate(0deg);
+            }
+            25% {
+                background-position: 25% 75%, 75% 25%, 25% 75%, 25% 25%;
+                filter: hue-rotate(15deg) contrast(1.3) brightness(1.2) saturate(1.4);
+                transform: scale(1.02) rotate(0.5deg);
+            }
+            50% {
+                background-position: 50% 100%, 50% 50%, 100% 50%, 50% 50%;
+                filter: hue-rotate(30deg) contrast(1.4) brightness(1.15) saturate(1.5);
+                transform: scale(1.01) rotate(0deg);
+            }
+            75% {
+                background-position: 75% 25%, 25% 75%, 75% 25%, 75% 75%;
+                filter: hue-rotate(15deg) contrast(1.3) brightness(1.2) saturate(1.4);
+                transform: scale(1.02) rotate(-0.5deg);
+            }
+        }
+
+        @keyframes causticWaves {
+            0%, 100% { 
+                background-size: 100% 100%, 120% 120%, 80% 80%, 150% 150%, 100% 100%;
+                opacity: 1;
+            }
+            50% { 
+                background-size: 120% 120%, 100% 100%, 100% 100%, 130% 130%, 100% 100%;
+                opacity: 0.9;
+            }
+        }
+
+        /* Particules flottantes */
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold-primary);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 15s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Typography luxueuse */
+        .luxury-title {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--gold-primary), var(--chrome-light), var(--gold-dark), var(--chrome-light));
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Boutons liquides */
+        .liquid-btn {
+            position: relative;
+            background: linear-gradient(45deg, var(--gold-dark), var(--gold-primary));
+            border: 2px solid var(--gold-primary);
+            border-radius: 50px;
+            padding: 12px 32px;
+            color: #000;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+            cursor: pointer;
+        }
+
+        .liquid-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .liquid-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.3);
+            border-color: var(--chrome-light);
+        }
+
+        .liquid-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Cartes premium ultra next-gen avec reflets gaming */
+        .premium-card {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.03) 0%,
+                rgba(255, 215, 0, 0.08) 15%,
+                rgba(255, 255, 255, 0.02) 30%,
+                rgba(255, 215, 0, 0.06) 45%,
+                rgba(255, 255, 255, 0.01) 60%,
+                rgba(255, 215, 0, 0.04) 75%,
+                rgba(255, 255, 255, 0.03) 100%);
+            backdrop-filter: blur(40px) saturate(200%) contrast(120%);
+            border: 2px solid transparent;
+            border-radius: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 
+                inset 0 2px 0 rgba(255, 255, 255, 0.15),
+                inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+                inset 2px 0 0 rgba(255, 255, 255, 0.05),
+                inset -2px 0 0 rgba(0, 0, 0, 0.05),
+                0 15px 40px rgba(0, 0, 0, 0.4),
+                0 0 120px rgba(255, 215, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+        }
+
+        .premium-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 2px;
+            background: conic-gradient(from 0deg at 50% 50%,
+                rgba(255, 215, 0, 0.8) 0deg,
+                rgba(255, 255, 255, 0.4) 30deg,
+                rgba(255, 215, 0, 1) 60deg,
+                rgba(232, 232, 232, 0.6) 90deg,
+                rgba(255, 215, 0, 0.9) 120deg,
+                rgba(255, 255, 255, 0.3) 150deg,
+                rgba(255, 215, 0, 0.7) 180deg,
+                rgba(255, 255, 255, 0.5) 210deg,
+                rgba(255, 215, 0, 1) 240deg,
+                rgba(232, 232, 232, 0.4) 270deg,
+                rgba(255, 215, 0, 0.8) 300deg,
+                rgba(255, 255, 255, 0.6) 330deg,
+                rgba(255, 215, 0, 0.8) 360deg);
+            border-radius: inherit;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            -webkit-mask-composite: xor;
+            animation: prismaticFlow 6s linear infinite;
+        }
+
+        .premium-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg at 50% 50%,
+                transparent 0deg,
+                rgba(255, 255, 255, 0.08) 30deg,
+                rgba(255, 215, 0, 0.15) 60deg,
+                rgba(255, 255, 255, 0.12) 90deg,
+                transparent 120deg,
+                rgba(255, 215, 0, 0.1) 180deg,
+                rgba(255, 255, 255, 0.06) 240deg,
+                transparent 360deg);
+            animation: reflectionSweep 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .premium-card:hover {
+            transform: translateY(-40px) rotateX(15deg) rotateY(5deg) scale(1.05);
+            box-shadow: 
+                inset 0 3px 0 rgba(255, 255, 255, 0.25),
+                inset 0 -3px 0 rgba(0, 0, 0, 0.15),
+                inset 3px 0 0 rgba(255, 255, 255, 0.1),
+                inset -3px 0 0 rgba(0, 0, 0, 0.1),
+                0 50px 100px rgba(0, 0, 0, 0.5),
+                0 0 200px rgba(255, 215, 0, 0.4),
+                0 0 400px rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 215, 0, 0.5);
+            filter: brightness(1.1) contrast(1.1) saturate(1.2);
+        }
+
+        .premium-card:active {
+            transform: translateY(-35px) rotateX(12deg) scale(1.02);
+            transition: all 0.1s ease;
+        }
+
+        @keyframes prismaticFlow {
+            0% { 
+                transform: rotate(0deg);
+                filter: hue-rotate(0deg) brightness(1) contrast(1);
+            }
+            25% { 
+                filter: hue-rotate(15deg) brightness(1.1) contrast(1.2);
+            }
+            50% { 
+                filter: hue-rotate(30deg) brightness(1.05) contrast(1.3);
+            }
+            75% { 
+                filter: hue-rotate(15deg) brightness(1.1) contrast(1.2);
+            }
+            100% { 
+                transform: rotate(360deg);
+                filter: hue-rotate(0deg) brightness(1) contrast(1);
+            }
+        }
+
+        @keyframes reflectionSweep {
+            0%, 100% { 
+                transform: rotate(0deg) scale(1);
+                opacity: 0.6;
+            }
+            25% { 
+                opacity: 0.8;
+            }
+            50% { 
+                transform: rotate(180deg) scale(1.2);
+                opacity: 1;
+            }
+            75% { 
+                opacity: 0.8;
+            }
+        }
+
+        /* Effet de vague au scroll */
+        .wave-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.320, 1);
+        }
+
+        .wave-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Dashboard chrome ultra liquide */
+        .chrome-surface {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.03) 0%,
+                rgba(255, 215, 0, 0.06) 15%,
+                rgba(255, 255, 255, 0.02) 30%,
+                rgba(255, 215, 0, 0.08) 45%,
+                rgba(255, 255, 255, 0.01) 60%,
+                rgba(255, 215, 0, 0.05) 75%,
+                rgba(255, 255, 255, 0.03) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            backdrop-filter: blur(25px) saturate(180%);
+            position: relative;
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+                0 10px 30px rgba(0, 0, 0, 0.2),
+                0 0 50px rgba(255, 215, 0, 0.05);
+            transition: all 0.4s ease;
+        }
+
+        .chrome-surface::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.8), transparent);
+            opacity: 0.8;
+        }
+
+        .chrome-surface::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            opacity: 0.4;
+        }
+
+        .chrome-surface:hover {
+            border-color: rgba(255, 215, 0, 0.2);
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+                0 15px 40px rgba(0, 0, 0, 0.3),
+                0 0 80px rgba(255, 215, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Stats brillantes */
+        .brilliant-stat {
+            background: radial-gradient(circle at center, var(--gold-primary), var(--gold-dark));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            position: relative;
+        }
+
+        .brilliant-stat::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, var(--gold-primary), transparent);
+            transform: translate(-50%, -50%);
+            opacity: 0.1;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.1; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.2; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .luxury-title {
+                font-size: 2.5rem;
+            }
+            .premium-card:hover {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Effet ripple */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 215, 0, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .ripple:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Curseur personnalisé -->
+    <div class="custom-cursor" id="cursor"></div>
+
+    <!-- Fond liquide animé -->
+    <div class="liquid-bg"></div>
+
+    <!-- Particules flottantes -->
+    <div class="floating-particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 p-6">
+        <div class="chrome-surface p-4">
+            <div class="flex items-center justify-between">
+                <div class="luxury-title text-2xl">INSTANT EATS</div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#dashboard" class="text-white hover:text-yellow-400 transition-all duration-300 font-medium">Dashboard</a>
+                    <a href="#recipes" class="text-white hover:text-yellow-400 transition-all duration-300 font-medium">Recettes</a>
+                    <a href="#premium" class="text-white hover:text-yellow-400 transition-all duration-300 font-medium">Premium</a>
+                    <button class="liquid-btn text-sm"></button>
+                </div>
+                <button class="md:hidden text-white">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center relative z-10 pt-32">
+        <div class="text-center max-w-4xl mx-auto px-6">
+            <h1 class="luxury-title text-6xl md:text-8xl mb-8">INSTANT EATS</h1>
+            <p class="text-2xl md:text-3xl mb-4 text-gray-300 font-light">L'EXPÉRIENCE CULINAIRE</p>
+            <p class="text-xl md:text-2xl mb-6 text-gray-400 font-light">QUI CHANGE VOTRE VIE</p>
+            
+            <!-- Stats satisfaction -->
+            <div class="flex justify-center items-center space-x-8 mb-8">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-yellow-400">4.8★</div>
+                    <div class="text-sm text-gray-400">sur 5</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-green-400">1400+</div>
+                    <div class="text-sm text-gray-400">utilisateurs</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-blue-400">180h</div>
+                    <div class="text-sm text-gray-400">gagnées/an</div>
+                </div>
+            </div>
+            
+            <p class="text-lg md:text-xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed">
+                <strong>Notre mission :</strong> Vous permettre de changer votre vie et gagner du temps pour vos affaires. 
+                Une expérience culinaire interactive qui vous fait économiser 180 heures par an !
+            </p>
+            <div <button class="liquid-btn text-lg ripple flex flex-col sm:flex-row gap-6 justify-center items-center" 
+    onclick="window.location.href='https://instanteats.gumroad.com/l/challenge'">
+    <i class="fas fa-rocket mr-2"></i>Commencer l'expérience
+</button>
+                </button>
+                <button class="liquid-btn text-lg bg-gradient-to-r from-gray-700 to-gray-500 ripple">
+                    <i class="fas fa-play mr-2"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="py-20 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="wave-reveal text-center mb-16">
+                <h2 class="luxury-title text-4xl md:text-6xl mb-6">TABLEAU DE BORD</h2>
+                <p class="text-xl text-gray-300">Votre espace culinaire personnel.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+                <div class="chrome-surface p-6 text-center wave-reveal">
+                    <div class="brilliant-stat text-4xl mb-2">+10000</div>
+                    <div class="text-gray-400">Recettes validé et certifié à patir d´un menu McDo</div>
+                </div>
+                <div class="chrome-surface p-6 text-center wave-reveal">
+                    <div class="brilliant-stat text-4xl mb-2">Elevé</div>
+                    <div class="text-gray-400">Taux de réussite</div>
+                </div>
+                <div class="chrome-surface p-6 text-center wave-reveal">
+                    <div class="brilliant-stat text-4xl mb-2">+180</div>
+                    <div class="text-gray-400">Heures économisé !/an</div>
+                </div>
+                <div class="chrome-surface p-6 text-center wave-reveal">
+                    <div class="brilliant-stat text-4xl mb-2">Élite</div>
+                    <div class="text-gray-400">Niveau actuel</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Recettes récentes -->
+                <div class="chrome-surface p-8 wave-reveal">
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-6">Recettes récentes</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-4 p-4 rounded-lg bg-black bg-opacity-30 ripple">
+                            <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                                <i class="fas fa-fire text-white"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-white">Nuggets Street XXL & sauce fromagère</div>
+                                <div class="text-sm text-gray-400">Ultra rapide • Facile • Pas cher</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4 p-4 rounded-lg bg-black bg-opacity-30 ripple">
+                            <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center">
+                                <i class="fas fa-crown text-white"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-white">Nuggets façon gastro & sauce crémeuse au romarin</div>
+                                <div class="text-sm text-gray-400">Ultra rapide • Facile • Pas cher</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4 p-4 rounded-lg bg-black bg-opacity-30 ripple">
+                            <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
+                                <i class="fas fa-leaf text-white"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-white">Pâtes Crémeuses TikTok</div>
+                                <div class="text-sm text-gray-400">Ultra rapide • Facile • Pas cher</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Défis du jour -->
+                <div class="chrome-surface p-8 wave-reveal">
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-6">Défi de la Semaine</h3>
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-lg bg-gradient-to-r from-orange-500 to-red-500 bg-opacity-25 border border-orange-400 border-opacity-40">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="font-bold text-white text-lg">Chauss'Feuil' Chocolat</span>
+                                <i class="fas fa-star text-yellow-400 text-xl"></i>
+                            </div>
+                            <div class="text-sm text-gray-300 mb-2">Fusion Brisée × Feuilletée</div>
+                            <div class="w-full bg-black bg-opacity-50 rounded-full h-3">
+                                <div class="bg-gradient-to-r from-orange-400 to-red-400 h-3 rounded-full animate-pulse" style="width: 0%"></div>
+                            </div>
+                            <div class="text-xs text-gray-400 mt-2">Récompense spéciale</div>
+                        </div>
+                        <div class="p-4 rounded-lg bg-gradient-to-r from-purple-400 to-pink-500 bg-opacity-20 border border-purple-400 border-opacity-30">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-semibold text-white">Épices exotiques</span>
+                                <span class="text-purple-400">1/5</span>
+                            </div>
+                            <div class="w-full bg-black bg-opacity-50 rounded-full h-2">
+                                <div class="bg-gradient-to-r from-purple-400 to-pink-500 h-2 rounded-full" style="width: 20%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievements -->
+                <div class="chrome-surface p-8 wave-reveal">
+                    <h3 class="text-2xl font-bold text-yellow-400 mb-6">Accomplissements</h3>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="text-center p-3 rounded-lg bg-black bg-opacity-30">
+                            <i class="fas fa-trophy text-2xl text-yellow-400 mb-2"></i>
+                            <div class="text-xs text-gray-400">Maîtrise totale</div>
+                        </div>
+                        <div class="text-center p-3 rounded-lg bg-black bg-opacity-30">
+                            <i class="fas fa-fire text-2xl text-red-400 mb-2"></i>
+                            <div class="text-xs text-gray-400">Série en feu</div>
+                        </div>
+                        <div class="text-center p-3 rounded-lg bg-black bg-opacity-30">
+                            <i class="fas fa-star text-2xl text-purple-400 mb-2"></i>
+                            <div class="text-xs text-gray-400">Brille en cuisine</div>
+                        </div>
+                        <div class="text-center p-3 rounded-lg bg-black bg-opacity-30">
+                            <i class="fas fa-clock text-xl text-blue-400 mb-2"></i>
+                            <div class="text-xs text-gray-400"></div>
+                        </div>
+                        <div class="text-center p-3 rounded-lg bg-black bg-opacity-30">
+                            <i class="fas fa-heart text-2xl text-pink-400 mb-2"></i>
+                            <div class="text-xs text-gray-400">Plaisir net</div>
+                        </div>
+                        <div class="text-center p-3 rounded-lg bg-black bg-opacity-30">
+                            <i class="fas fa-users text-2xl text-green-400 mb-2"></i>
+                            <div class="text-xs text-gray-400">Chef confirmé</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Premium Section -->
+
+<section id="premium" class="py-20 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="wave-reveal text-center mb-16">
+                <h2 class="luxury-title text-4xl md:text-6xl mb-6">ABONNEMENTS PREMIUM</h2>
+                <p class="text-xl text-gray-300">Élevez votre expérience culinaire</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Daily -->
+                <div class="premium-card p-8 wave-reveal">
+                    <div class="relative z-10">
+                        <div class="text-center mb-8">
+                            <h3 class="text-2xl font-bold text-yellow-400 mb-2">INSTANT EATS DAILY</h3>
+                            <div class="text-4xl font-bold text-white mb-2">3,99€</div>
+                            <div class="text-gray-400">/mois</div>
+                        </div>
+                        <div class="bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-bold px-4 py-2 rounded-full text-center mb-6">
+                            🔥 NOUS CHERCHONS LE MEILLEUR
+                        </div>
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-check text-yellow-400"></i>
+                                <span class="text-gray-300"><strong>240 recettes par mois</strong></span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-check text-yellow-400"></i>
+                                <span class="text-gray-300">Tu explores les saveurs du monde.
+Tu cuisines avec précision.
+Tu choisis 
+                          Un accompagnement réactif pour toutes tes questions.
+                       </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-check text-yellow-400"></i>
+                                <span class="text-gray-300"><strong> Chaque jour, 8 créations inédites.</strong> De la gastronomie au végétarien, du fast-food revisité au luxe culinaire :
+Instant Eats élève ton quotidien.</span>
+                            </li>
+                          </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-check text-yellow-400"></i>
+                                <span class="text-gray-300"><strong> Un accompagnement réactif pour toutes tes questions.</strong> 3,99 € par mois pour reprendre le contrôle, et ne plus jamais dépendre du “à emporter”.</span>
+                            </li>
+                            
+                            
+                          </li>
+                        </ul>
+        <!-- Anchor styled as a button (valide + accessible) -->
+<a
+  href="https://instanteats.gumroad.com/l/challenge?_gl"
+  class="liquid-btn w-full ripple text-lg font-black inline-block text-center py-3"
+  role="button"
+  aria-label="Commencer Daily - Instant Eats"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  COMMENCER DAILY
+</a>
+                    </div>
+                </div>
+
+                <!-- ProCoach -->
+                <div class="premium-card p-8 wave-reveal">
+                    <div class="relative z-10">
+                        <div class="text-center mb-8">
+                            <h3 class="text-2xl font-bold text-yellow-400 mb-2">INSTANT EATS PROCOACH</h3>
+                            <div class="text-4xl font-bold text-white mb-2">6,99€</div>
+                            <div class="text-gray-400">/mois</div>
+                        </div>
+                        <div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-full text-center mb-6">
+                            🎯 3 FORMATIONS COMPLÈTES
+                        </div>
+                        <ul class="space-y-2 mb-8 text-xs">
+                            <li class="flex items-start space-x-2 p-2 rounded-lg bg-black bg-opacity-20">
+                                <i class="fas fa-chart-line text-green-400 mt-1 text-sm"></i>
+                                <div>
+                                    <div class="font-semibold text-white text-sm">Formation Finance & Investissement</div>
+                                    <div class="text-gray-400 text-xs">• Gérer budget comme milliardaire • Épargner intelligemment</div>
+                                    <div class="text-gray-400 text-xs">• Trading raisonnable • Stratégies d'investissement</div>
+                                </div>
+                            </li>
+                            <li class="flex items-start space-x-2 p-2 rounded-lg bg-black bg-opacity-20">
+                                <i class="fas fa-heart-pulse text-red-400 mt-1 text-sm"></i>
+                                <div>
+                                    <div class="font-semibold text-white text-sm">Formation Nutritionniste</div>
+                                    <div class="text-gray-400 text-xs">• Améliorer santé & sommeil • Boost récupération</div>
+                                    <div class="text-gray-400 text-xs">• + Confiance & muscles • Arrêt fringales • Bonnes habitudes</div>
+                                </div>
+                            </li>
+                            <li class="flex items-start space-x-2 p-2 rounded-lg bg-black bg-opacity-20">
+                                <i class="fas fa-dumbbell text-orange-400 mt-1 text-sm"></i>
+                                <div>
+                                    <div class="font-semibold text-white text-sm">Formation Renforcement Musculaire</div>
+                                    <div class="text-gray-400 text-xs">• Se muscler sans blessures • Abdos rapidement</div>
+                                    <div class="text-gray-400 text-xs">• Techniques validées par coachs France</div>
+                                </div>
+                              </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-check text-yellow-400"></i>
+                                <span class="text-gray-300 text-xs"><strong>Recettes bonus exclusives au choix</strong> - Devenez chef étoilé en 30 jours !</span>
+              <li class="flex items-center space-x-3">
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-check text-yellow-400"></i>
+                                <span class="text-gray-300 text-xs"><strong>Challenge d’élite : </strong> structuré, motivant et concret, conçu pour des résultats réels et durables. </span>
+              <li class="flex items-center space-x-3">
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-check text-yellow-400"></i>
+                                <span class="text-gray-300 text-xs"><strong>Accès direct à notre équipe : </strong> un accompagnement réactif, précis, humain.</span>
+              <li class="flex items-center space-x-3">
+                                <i class="fas fa-check text-yellow-400"></i>
+                                <span class="text-gray-300 text-xs"><strong>Cours privés en ligne :</strong> avance à ton rythme, développe ton expertise, maîtrise chaque domaine.</span>              </li>
+                        </ul>
+                                         <a
+  href="https://instanteats.gumroad.com/l/challenge?_gl"
+  class="liquid-btn w-full ripple text-lg font-black inline-block text-center py-3"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  DÉBUTER PROCOACH
+</a>
+                    </div>
+                </div>
+
+                <!-- Élite -->
+                <div class="premium-card p-8 wave-reveal transform scale-105">
+                    <div class="absolute top-4 right-4 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full animate-pulse">
+                        ⭐ POPULAIRE
+                    </div>
+                    <div class="relative z-10">
+                        <div class="text-center mb-8">
+                            <h3 class="text-2xl font-bold text-yellow-400 mb-2">INSTANT EATS ÉLITE</h3>
+                            <div class="flex items-center justify-center space-x-2 mb-2">
+                                <span class="text-2xl text-gray-500 line-through font-bold">10,98€</span>
+                                <span class="text-4xl font-bold text-white">7,99€</span>
+                            </div>
+                            <div class="text-gray-400">/mois</div>
+                            <div class="text-sm text-green-400 font-semibold mt-2">💚 Résiliation sous 14 jours</div>
+                        </div>
+                        <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold px-4 py-2 rounded-full text-center mb-6">
+                            🚀 DAILY + PROCOACH INCLUS
+                        </div>
+                        <ul class="space-y-3 mb-8 text-sm">
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-crown text-yellow-400"></i>
+                                <span class="text-gray-300"><strong>240 recettes/mois</strong> + sélection premium</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-crown text-yellow-400"></i>
+                                <span class="text-gray-300"><strong>3 formations complètes</strong> (Finance, Nutrition, Sport)</span>
+                            </li>
+                          </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-crown text-yellow-400"></i>
+                                <span class="text-gray-300"><strong>Accès direct à notre équipe </strong> réponses rapides à toutes tes questions.</span>
+                            </li>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-crown text-yellow-400"></i>
+                                <span class="text-gray-300"><strong> Challenge complet et intuitif : </strong> conçu pour des résultats réels, naturels, rapides.</span>
+                            </li>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-crown text-yellow-400"></i>
+                                <span class="text-gray-300"><strong> Recettes bonus au choix : </strong> exclusives, introuvables ailleurs.</span>
+                            </li>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-crown text-yellow-400"></i>
+                                <span class="text-gray-300"><strong> Cours en ligne premium : </strong> deviens expert à ton rythme, depuis ton écran.</span>
+                            </li>
+                            
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <i class="fas fa-crown text-yellow-400"></i>
+                                <span class="text-gray-300">Et bien plus encore...</span>
+                            </li>
+                        </ul>
+                        <div class="bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-center py-2 rounded-lg mb-4 font-bold">
+                            🔥 ÉCONOMISEZ 3€ PAR MOIS
+                          en t'abonnant dès maintenant
+                        </div>
+                        <a href="https://instanteats.gumroad.com/l/challenge?_gl" class="w-full">
+    <button class="liquid-btn w-full ripple text-lg font-black">
+        DEVENIR ÉLITE MAINTENANT
+    </button>
+</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="chrome-surface p-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div>
+                        <div class="luxury-title text-2xl mb-4">INSTANT EATS</div>
+                        <p class="text-gray-400 mb-4">
+                            
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-white mb-4">Plateforme</h4>
+                        <ul class="space-y-2 text-gray-400">
+                            <li><a href="#" class="hover:text-yellow-400 transition-colors">Recettes</a></li>
+                            <li><a href="#" class="hover:text-yellow-400 transition-colors">Coach</a></li>
+                            <li><a href="#" class="hover:text-yellow-400 transition-colors">Communauté</a></li>
+                            <li><a href="#" class="hover:text-yellow-400 transition-colors">Défis</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4       <ul class="space-y-2 text-gray-400">
+                            
+ 
+                             
+                        </ul>
+                    </div>
+                    <div>
+                        <h4         <ul class="space-y-2 text-gray-400">
+                            
+     <!-- Ton bouton/lien Contact -->
+<li>
+  <a href="#" id="open-help" class="hover:text-yellow-400 transition-colors">Contact</a>
+</li>
+
+<!-- Le modal -->
+<div id="help-modal" class="help-modal hidden fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
+  <div class="help-content bg-gray-900 p-8 rounded-lg max-w-lg w-full text-white">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="luxury-title text-3xl">Centre d'aide</h2>
+      <button id="close-help" class="text-white hover:text-yellow-400 text-2xl">×</button>
+    </div>
+    <div class="space-y-6">
+      <div class="chrome-surface p-6">
+        <h3 class="text-xl font-bold text-yellow-400 mb-4">Nous contacter</h3>
+        <p class="text-gray-300 mb-4">Pour toutes questions, retours produit, avis et plus :</p>
+        <a href="mailto:instant.eats@gmx.com" class="liquid-btn inline-block">
+          <i class="fas fa-envelope mr-2"></i>instant.eats@gmx.com
+        </a>
+      </div>
+      <div class="chrome-surface p-6">
+        <h3 class="text-xl font-bold text-green-400 mb-4">Support rapide</h3>
+        <ul class="space-y-3 text-gray-300">
+          <li>✅ Réponse sous 24h maximum</li>
+          <li>✅ Support technique dédié</li>
+          <li>✅ Aide personnalisée</li>
+          <li>✅ Suivi de satisfaction</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Script pour ouvrir/fermer -->
+<script>
+  const openHelp = document.getElementById('open-help');
+  const closeHelp = document.getElementById('close-help');
+  const helpModal = document.getElementById('help-modal');
+
+  openHelp.addEventListener('click', (e) => {
+    e.preventDefault();
+    helpModal.classList.remove('hidden');
+  });
+
+  closeHelp.addEventListener('click', () => {
+    helpModal.classList.add('hidden');
+  });
+
+  // Fermeture en cliquant à l’extérieur
+  window.addEventListener('click', (e) => {
+    if (e.target === helpModal) {
+      helpModal.classList.add('hidden');
+    }
+  });
+</script>                       
+                            
+                            
+                        </ul>
+                    </div>
+                </div>
+                <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                    <p>&copy; 2025 Instant Eats.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Variables globales pour les effets
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+        let clickWaves = [];
+
+        // Curseur personnalisé avec trail
+        const cursor = document.getElementById('cursor');
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            // Mise à jour des propriétés CSS pour le fond réactif
+            const xPercent = (mouseX / window.innerWidth) * 100;
+            const yPercent = (mouseY / window.innerHeight) * 100;
+            document.documentElement.style.setProperty('--mouse-x', `${xPercent}%`);
+            document.documentElement.style.setProperty('--mouse-y', `${yPercent}%`);
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.15;
+            cursorY += (mouseY - cursorY) * 0.15;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Effet de déformation au clic - ULTRA PREMIUM
+        document.addEventListener('click', (e) => {
+            createClickWave(e.clientX, e.clientY);
+            deformUniverse(e.clientX, e.clientY);
+            createPrismaticExplosion(e.clientX, e.clientY);
+        });
+
+        function createClickWave(x, y) {
+            const wave = document.createElement('div');
+            wave.style.position = 'fixed';
+            wave.style.left = x + 'px';
+            wave.style.top = y + 'px';
+            wave.style.width = '0px';
+            wave.style.height = '0px';
+            wave.style.borderRadius = '50%';
+            wave.style.border = '3px solid rgba(255, 215, 0, 0.8)';
+            wave.style.pointerEvents = 'none';
+            wave.style.zIndex = '9998';
+            wave.style.transform = 'translate(-50%, -50%)';
+            wave.style.animation = 'clickWaveExpand 1s ease-out forwards';
+            document.body.appendChild(wave);
+
+            // Ajouter les keyframes dynamiquement
+            if (!document.getElementById('clickWaveStyle')) {
+                const style = document.createElement('style');
+                style.id = 'clickWaveStyle';
+                style.textContent = `
+                    @keyframes clickWaveExpand {
+                        0% {
+                            width: 0px;
+                            height: 0px;
+                            opacity: 1;
+                            border-width: 3px;
+                            filter: blur(0px) hue-rotate(0deg);
+                        }
+                        50% {
+                            border-width: 1px;
+                            filter: blur(1px) hue-rotate(180deg);
+                        }
+                        100% {
+                            width: 800px;
+                            height: 800px;
+                            opacity: 0;
+                            border-width: 0px;
+                            filter: blur(3px) hue-rotate(360deg);
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            setTimeout(() => {
+                wave.remove();
+            }, 1000);
+        }
+
+        function deformUniverse(x, y) {
+            const liquidBg = document.querySelector('.liquid-bg');
+            const cards = document.querySelectorAll('.premium-card, .chrome-surface');
+            
+            // Déformation du fond liquide
+            liquidBg.style.transform = `
+                perspective(1000px) 
+                rotateX(${(y - window.innerHeight/2) * 0.01}deg) 
+                rotateY(${(x - window.innerWidth/2) * 0.01}deg) 
+                scale(1.02)
+            `;
+            liquidBg.style.filter = `
+                hue-rotate(${Math.random() * 60}deg) 
+                brightness(1.2) 
+                contrast(1.3) 
+                saturate(1.4)
+            `;
+
+            // Reset après l'animation
+            setTimeout(() => {
+                liquidBg.style.transform = '';
+                liquidBg.style.filter = '';
+            }, 600);
+
+            // Déformation des éléments proches du clic
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const cardCenterX = rect.left + rect.width / 2;
+                const cardCenterY = rect.top + rect.height / 2;
+                const distance = Math.sqrt(
+                    Math.pow(x - cardCenterX, 2) + Math.pow(y - cardCenterY, 2)
+                );
+
+                if (distance < 300) {
+                    const intensity = (300 - distance) / 300;
+                    card.style.transform = `
+                        perspective(800px) 
+                        rotateX(${(y - cardCenterY) * intensity * 0.05}deg) 
+                        rotateY(${(x - cardCenterX) * intensity * 0.05}deg) 
+                        scale(${1 + intensity * 0.05})
+                        translateZ(${intensity * 20}px)
+                    `;
+                    card.style.filter = `
+                        brightness(${1 + intensity * 0.3}) 
+                        saturate(${1 + intensity * 0.5})
+                        contrast(${1 + intensity * 0.2})
+                    `;
+
+                    setTimeout(() => {
+                        card.style.transform = '';
+                        card.style.filter = '';
+                    }, 400);
+                }
+            });
+        }
+
+        function createPrismaticExplosion(x, y) {
+            for (let i = 0; i < 12; i++) {
+                const particle = document.createElement('div');
+                const angle = (i / 12) * Math.PI * 2;
+                const velocity = 50 + Math.random() * 100;
+                const size = 4 + Math.random() * 8;
+                
+                particle.style.position = 'fixed';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.background = `linear-gradient(45deg, 
+                    hsl(${Math.random() * 60 + 40}, 100%, 70%),
+                    hsl(${Math.random() * 60 + 40}, 100%, 90%)
+                )`;
+                particle.style.borderRadius = '50%';
+                particle.style.pointerEvents = 'none';
+                particle.style.zIndex = '9997';
+                particle.style.boxShadow = `0 0 ${size * 2}px currentColor`;
+                particle.style.filter = 'blur(0.5px)';
+                
+                const endX = x + Math.cos(angle) * velocity;
+                const endY = y + Math.sin(angle) * velocity;
+                
+                particle.style.animation = `
+                    prismaticParticle${i} 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards
+                `;
+
+                // Keyframes dynamiques pour chaque particule
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes prismaticParticle${i} {
+                        0% {
+                            transform: translate(-50%, -50%) scale(1);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: translate(${endX - x}px, ${endY - y}px) translate(-50%, -50%) scale(0);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+                document.body.appendChild(particle);
+
+                setTimeout(() => {
+                    particle.remove();
+                    style.remove();
+                }, 1200);
+            }
+        }
+
+        // Générer des particules
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Animation de révélation au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.wave-reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Interaction hover pour les boutons
+        document.querySelectorAll('.liquid-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'scale(2)';
+            });
+            btn.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'scale(1)';
+            });
+        });
+
+        // Effet de vibration sur les cartes premium
+        document.querySelectorAll('.premium-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.animation = 'none';
+                setTimeout(() => {
+                    card.style.animation = '';
+                }, 10);
+            });
+        });
+
+        // Parallax effect léger
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            
+            document.querySelector('.liquid-bg').style.transform = `translateY(${rate}px)`;
+        });
+
+        // Animation des statistiques
+        function animateStats() {
+            const stats = document.querySelectorAll('.brilliant-stat');
+            stats.forEach(stat => {
+                const text = stat.textContent;
+                if (text.includes('%')) {
+                    const value = parseInt(text);
+                    animateNumber(stat, 0, value, '%');
+                } else if (!isNaN(parseInt(text))) {
+                    const value = parseInt(text);
+                    animateNumber(stat, 0, value, '');
+                }
+            });
+        }
+
+        function animateNumber(element, start, end, suffix) {
+            const duration = 2000;
+            const increment = (end - start) / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= end) {
+                    current = end;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current) + suffix;
+            }, 16);
+        }
+
+        // Démarrer l'animation des stats quand visible
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateStats();
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        });
+
+        const dashboardSection = document.querySelector('#dashboard');
+        if (dashboardSection) {
+            statsObserver.observe(dashboardSection);
+        }
+    </script>
+</body>
+</html>
