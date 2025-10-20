@@ -1,149 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
 <Head
-    <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion Supabase/Google</title>
-    
-    <style>
-        /* ------------------------------------- */
-        /* CSS pour le bouton de connexion Google */
-        /* ------------------------------------- */
-
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f9;
-            margin: 0;
-        }
-
-        .google-btn {
-            /* Styles généraux */
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            height: 40px;
-            padding: 0 16px;
-            
-            /* Design épuré, blanc et arrondi */
-            background-color: #ffffff; /* Fond blanc */
-            color: #444444; /* Texte gris foncé */
-            border: 1px solid #dadce0; /* Bordure fine et claire */
-            border-radius: 8px; /* Bords arrondis */
-            
-            /* Police et Texte */
-            font-family: Roboto, Arial, sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            text-decoration: none;
-            cursor: pointer;
-            
-            /* Effets visuels */
-            transition: background-color 0.15s ease, box-shadow 0.15s ease;
-        }
-
-        /* Logo Google */
-        .google-logo {
-            width: 18px;
-            height: 18px;
-            margin-right: 10px;
-        }
-
-        /* Effets au survol et au clic */
-        .google-btn:hover {
-            background-color: #f7f7f7;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-        }
-
-        .google-btn:active {
-            background-color: #eeeeee;
-        }
-    </style>
-</head>
-<body>
-
-    <button id="saveProgress" class="google-btn">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo" class="google-logo">
-        <span id="buttonText">Se connecter / Sauvegarder</span>
-    </button>
-    
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-
-        // ⚡ Infos Supabase (à garder secret si ce n'était pas la clé 'anon')
-        const supabaseUrl = 'https://oqjaltmsphbnsfecpyaw.supabase.com'
-        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9xamFsdG1zcGhibnNmZWNweawIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA4OTk0MTMsImV4cCI6MjA3NjQ3NTQxM30.wcwWZktlZsU0j7aVD_QicsMkSJAKxLldgGx6egqUDRM'
-        const supabase = createClient(supabaseUrl, supabaseAnonKey)
-
-        const button = document.getElementById('saveProgress');
-        const buttonText = document.getElementById('buttonText');
-
-        /**
-         * Met à jour le texte du bouton en fonction de l'état de l'utilisateur.
-         * @param {Object | null} user - L'objet utilisateur Supabase ou null.
-         */
-        const updateButtonUI = (user) => {
-            if (user) {
-                buttonText.textContent = 'Sauvegarder le progrès';
-                console.log('Utilisateur connecté :', user.id);
-            } else {
-                buttonText.textContent = 'Se connecter avec Google';
-                console.log('Utilisateur déconnecté.');
-            }
-        };
-
-        // 🔹 Vérifie si l'utilisateur est déjà connecté (au chargement)
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            updateButtonUI(session?.user);
-        });
-
-        // 🔹 Écoute les changements d'état (après redirection Google)
-        supabase.auth.onAuthStateChange((event, session) => {
-            updateButtonUI(session?.user);
-        });
-
-        button.addEventListener('click', async () => {
-            // ⭐ Utilisation de la méthode moderne pour obtenir l'utilisateur
-            const { data: { user } } = await supabase.auth.getUser(); 
-
-            if (!user) {
-                // 🔹 Si pas connecté → ouvre Google
-                const { error } = await supabase.auth.signInWithOAuth({
-                    provider: 'google',
-                    options: {
-                        // 💡 Redirection dynamique : retourne à la page actuelle
-                        redirectTo: window.location.origin + window.location.pathname 
-                    }
-                })
-                if (error) alert('Erreur connexion Google : ' + error.message)
-                return
-            }
-
-            // 💡 Remplacez ceci par la variable de votre vrai progrès !
-            const actualProgress = 50; 
-
-            // 🔹 Si connecté → sauvegarde le progrès
-            const { data, error } = await supabase
-                .from('progress')
-                .insert([{ user_id: user.id, progress: actualProgress }]) 
-
-            if (error) {
-                alert('Erreur sauvegarde : ' + error.message)
-            } else {
-                alert('Progrès sauvegardé ! (ID Utilisateur: ' + user.id + ')');
-                // Redirection après succès
-                window.location.href = '/dashboard' 
-            }
-        })
-    </script>
-</body>
-</html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INSTANT EATS</title>
@@ -239,11 +96,7 @@
                 opacity: 0.9;
             }
         }
-<button id="saveProgress" class="liquid-btn">Sauvegarder le progrès</button>
 
-
-})
-</script>
         /* Particules flottantes */
         .floating-particles {
             position: fixed;
@@ -476,7 +329,7 @@
             opacity: 1;
             transform: translateY(0);
         }
-https://github.com/Toiniu2000/instant.eats./edit/main/index.html
+
         /* Dashboard chrome ultra liquide */
         .chrome-surface {
             background: linear-gradient(135deg, 
@@ -785,9 +638,6 @@ https://github.com/Toiniu2000/instant.eats./edit/main/index.html
         </div>
     </section>
 
-})
-</script>
-</script>
     <!-- Premium Section -->
 
 <section id="premium" class="py-20 relative z-10">
@@ -981,9 +831,149 @@ Instant Eats élève ton quotidien.</span>
             </div>
         </div>
     </section>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion Supabase/Google</title>
+    
+    <style>
+        /* ------------------------------------- */
+        /* CSS pour le bouton de connexion Google */
+        /* ------------------------------------- */
 
-})
-</script>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0;
+        }
+
+        .google-btn {
+            /* Styles généraux */
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+            padding: 0 16px;
+            
+            /* Design épuré, blanc et arrondi */
+            background-color: #ffffff; /* Fond blanc */
+            color: #444444; /* Texte gris foncé */
+            border: 1px solid #dadce0; /* Bordure fine et claire */
+            border-radius: 8px; /* Bords arrondis */
+            
+            /* Police et Texte */
+            font-family: Roboto, Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            
+            /* Effets visuels */
+            transition: background-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        /* Logo Google */
+        .google-logo {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+        }
+
+        /* Effets au survol et au clic */
+        .google-btn:hover {
+            background-color: #f7f7f7;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .google-btn:active {
+            background-color: #eeeeee;
+        }
+    </style>
+</head>
+<body>
+
+    <button id="saveProgress" class="google-btn">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo" class="google-logo">
+        <span id="buttonText">Se connecter / Sauvegarder</span>
+    </button>
+    
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+        // ⚡ Infos Supabase (à garder secret si ce n'était pas la clé 'anon')
+        const supabaseUrl = 'https://oqjaltmsphbnsfecpyaw.supabase.com'
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9xamFsdG1zcGhibnNmZWNweawIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA4OTk0MTMsImV4cCI6MjA3NjQ3NTQxM30.wcwWZktlZsU0j7aVD_QicsMkSJAKxLldgGx6egqUDRM'
+        const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+        const button = document.getElementById('saveProgress');
+        const buttonText = document.getElementById('buttonText');
+
+        /**
+         * Met à jour le texte du bouton en fonction de l'état de l'utilisateur.
+         * @param {Object | null} user - L'objet utilisateur Supabase ou null.
+         */
+        const updateButtonUI = (user) => {
+            if (user) {
+                buttonText.textContent = 'Sauvegarder le progrès';
+                console.log('Utilisateur connecté :', user.id);
+            } else {
+                buttonText.textContent = 'Se connecter avec Google';
+                console.log('Utilisateur déconnecté.');
+            }
+        };
+
+        // 🔹 Vérifie si l'utilisateur est déjà connecté (au chargement)
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            updateButtonUI(session?.user);
+        });
+
+        // 🔹 Écoute les changements d'état (après redirection Google)
+        supabase.auth.onAuthStateChange((event, session) => {
+            updateButtonUI(session?.user);
+        });
+
+        button.addEventListener('click', async () => {
+            // ⭐ Utilisation de la méthode moderne pour obtenir l'utilisateur
+            const { data: { user } } = await supabase.auth.getUser(); 
+
+            if (!user) {
+                // 🔹 Si pas connecté → ouvre Google
+                const { error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        // 💡 Redirection dynamique : retourne à la page actuelle
+                        redirectTo: window.location.origin + window.location.pathname 
+                    }
+                })
+                if (error) alert('Erreur connexion Google : ' + error.message)
+                return
+            }
+
+            // 💡 Remplacez ceci par la variable de votre vrai progrès !
+            const actualProgress = 50; 
+
+            // 🔹 Si connecté → sauvegarde le progrès
+            const { data, error } = await supabase
+                .from('progress')
+                .insert([{ user_id: user.id, progress: actualProgress }]) 
+
+            if (error) {
+                alert('Erreur sauvegarde : ' + error.message)
+            } else {
+                alert('Progrès sauvegardé ! (ID Utilisateur: ' + user.id + ')');
+                // Redirection après succès
+                window.location.href = '/dashboard' 
+            }
+        })
+    </script>
+</body>
+</html>
     <!-- Footer -->
     <footer class="py-16 relative z-10">
         <div class="max-w-7xl mx-auto px-6">
