@@ -641,51 +641,7 @@
             </div>
         </div>
     </section>
-<button id="saveProgress" class="liquid-btn">Sauvegarder le progrès</button>
 
-<script type="module">
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-
-// ⚡ Tes infos Supabase
-const supabaseUrl = 'https://oqjaltmsphbnsfecpyaw.supabase.com'
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9xamFsdG1zcGhibnNmZWNweWF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA4OTk0MTMsImV4cCI6MjA3NjQ3NTQxM30.wcwWZktlZsU0j7aVD_QicsMkSJAKxLldgGx6egqUDRM'
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
-
-// ⚡ Détecte si un utilisateur est déjà connecté après redirection Google
-supabase.auth.onAuthStateChange((event, session) => {
-    if (session?.user) {
-        console.log('Utilisateur connecté :', session.user)
-    }
-})
-
-document.getElementById('saveProgress').addEventListener('click', async () => {
-    let user = supabase.auth.user()
-
-    if (!user) {
-        // Si pas connecté → login Google
-        const { error } = await supabase.auth.signIn({
-            provider: 'google',
-            options: {
-                redirectTo: 'https://instant-eats-two.vercel.app/' // ton URL de redirection
-            }
-        })
-        if (error) {
-            alert('Erreur de connexion : ' + error.message)
-        }
-        return
-    }
-
-    // L'utilisateur est connecté → sauvegarde le progrès
-    const { data, error } = await supabase
-        .from('progress')
-        .insert([{ user_id: user.id, progress: 50 }]) // remplace 50 par la vraie valeur
-
-    if (error) {
-        alert('Erreur lors de la sauvegarde : ' + error.message)
-    } else {
-        alert('Progrès sauvegardé !')
-        window.location.href = '/dashboard' // redirection après sauvegarde
-    }
 })
 </script>
 </script>
