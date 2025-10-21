@@ -637,7 +637,397 @@
             </div>
         </div>
     </section>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Sécurisée avec Sauvegarde</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        /* ------------------------------------- */
+        /* Styles Généraux et Layout */
+        /* ------------------------------------- */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
 
+        /* ------------------------------------- */
+        /* Modale de Connexion Forcée (Overlay) */
+        /* ------------------------------------- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            /* Animation d'apparition/disparition */
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            animation: fadeIn 0.5s;
+        }
+
+        .modal-content h2 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .modal-content p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+
+        /* ------------------------------------- */
+        /* Bouton Google (Repris de votre style) */
+        /* ------------------------------------- */
+        .google-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+            padding: 0 20px;
+            background-color: #ffffff; 
+            color: #444444; 
+            border: 1px solid #dadce0; 
+            border-radius: 8px; 
+            font-family: Roboto, Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .google-logo {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+        }
+        .google-btn:hover {
+            background-color: #f7f7f7;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        /* ------------------------------------- */
+        /* Icône de Profil (en haut à droite) */
+        /* ------------------------------------- */
+        #profileContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 500;
+            display: none; /* Caché par défaut, visible si connecté */
+        }
+        
+        #profileIcon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            object-fit: cover;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 2px #3498db;
+            transition: box-shadow 0.2s;
+        }
+        #profileIcon:hover {
+            box-shadow: 0 0 0 4px #2980b9;
+        }
+
+        /* ------------------------------------- */
+        /* Menu de Déconnexion */
+        /* ------------------------------------- */
+        #profileMenu {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            width: 180px;
+            padding: 10px 0;
+            text-align: left;
+            display: none; /* Caché par défaut */
+        }
+
+        #profileMenu p {
+            padding: 5px 15px;
+            font-size: 12px;
+            color: #777;
+            border-bottom: 1px solid #eee;
+            margin: 0 0 10px 0;
+        }
+
+        #logoutButton {
+            display: block;
+            width: 100%;
+            padding: 10px 15px;
+            background: none;
+            border: none;
+            text-align: left;
+            color: #e74c3c;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+            border-radius: 0 0 8px 8px;
+        }
+        #logoutButton:hover {
+            background-color: #fdeaea;
+        }
+
+        /* ------------------------------------- */
+        /* Contenu du Site (Simulé) */
+        /* ------------------------------------- */
+        #mainContent {
+            padding-top: 80px; /* Pour éviter que le contenu ne soit caché par l'icône de profil */
+            padding-bottom: 20px;
+            text-align: center;
+        }
+        #progressEditor {
+            width: 80%;
+            max-width: 600px;
+            height: 200px;
+            margin: 20px auto;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            resize: none;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="authModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Connexion Requise 🔒</h2>
+            <p>Vous devez vous connecter pour accéder au site et sauvegarder votre progression. Vos données sont sécurisées par votre compte Google.</p>
+            <button id="googleSignInButton" class="google-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo" class="google-logo">
+                Se connecter avec Google
+            </button>
+        </div>
+    </div>
+
+    <div id="profileContainer">
+        <img id="profileIcon" src="https://via.placeholder.com/40" alt="Profil">
+        <div id="profileMenu" class="hidden">
+            <p id="profileEmail">utilisateur@google.com</p>
+            <button id="logoutButton">Se déconnecter</button>
+        </div>
+    </div>
+
+    <div id="mainContent" class="hidden">
+        <h1>Bienvenue !</h1>
+        <p>Ceci est le contenu du site. Tout ce que vous écrivez ci-dessous sera sauvegardé automatiquement sous votre compte.</p>
+        
+        <textarea id="progressEditor" placeholder="Commencez votre travail ici..."></textarea>
+        
+        <p style="font-size: 12px; color: green; margin-top: 10px;">Sauvegarde automatique activée !</p>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+        // ⚡ Infos Supabase
+        const supabaseUrl = 'https://oqjaltmsphbnsfecpyaw.supabase.com'
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9xamFsdG1zcGhibnNmZWNweawIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA4OTk0MTMsImV4cCI6MjA3NjQ3NTQxM30.wcwWZktlZsU0j7aVD_QicsMkSJAKxLldgGx6egqUDRM'
+        const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+        // Éléments du DOM
+        const authModal = document.getElementById('authModal');
+        const googleSignInButton = document.getElementById('googleSignInButton');
+        const mainContent = document.getElementById('mainContent');
+        const profileContainer = document.getElementById('profileContainer');
+        const profileIcon = document.getElementById('profileIcon');
+        const profileMenu = document.getElementById('profileMenu');
+        const profileEmail = document.getElementById('profileEmail');
+        const logoutButton = document.getElementById('logoutButton');
+        const progressEditor = document.getElementById('progressEditor');
+
+        // Constantes pour la sauvegarde
+        const DATA_TABLE = 'user_data'; // Renommez votre table 'progress' en 'user_data' ou changez ceci.
+        let saveTimer = null;
+
+        // ----------------------------------------------------
+        // 🔹 FONCTIONS DE GESTION DE LA PROGRESSION (Sauvegarde/Chargement)
+        // ----------------------------------------------------
+
+        /**
+         * Charge la progression de l'utilisateur depuis Supabase.
+         * @param {string} userId - L'ID de l'utilisateur connecté.
+         */
+        const loadProgress = async (userId) => {
+            const { data, error } = await supabase
+                .from(DATA_TABLE)
+                .select('content')
+                .eq('user_id', userId)
+                .single();
+            
+            if (error && error.code !== 'PGRST116') { // PGRST116 = ligne non trouvée (normal pour un nouvel utilisateur)
+                console.error('Erreur chargement progression:', error.message);
+                // Si erreur fatale, afficher un message à l'utilisateur
+            } else if (data) {
+                // Charge le contenu dans le textarea
+                progressEditor.value = data.content || '';
+                console.log('Progression chargée avec succès.');
+            } else {
+                // Nouvel utilisateur, laisse le textarea vide
+                progressEditor.value = '';
+                console.log('Nouvel utilisateur ou pas de progression trouvée. Démarrage à zéro.');
+            }
+        };
+
+        /**
+         * Sauvegarde la progression de l'utilisateur dans Supabase (Upsert).
+         * @param {string} userId - L'ID de l'utilisateur connecté.
+         * @param {string} content - Le contenu à sauvegarder.
+         */
+        const saveProgress = async (userId, content) => {
+            console.log('Sauvegarde en cours...');
+            
+            const { error } = await supabase
+                .from(DATA_TABLE)
+                .upsert(
+                    { 
+                        user_id: userId, 
+                        content: content,
+                        updated_at: new Date().toISOString()
+                    },
+                    { 
+                        onConflict: 'user_id', // Si user_id existe, met à jour la ligne
+                        ignoreDuplicates: false 
+                    }
+                );
+
+            if (error) {
+                console.error('Erreur de sauvegarde:', error.message);
+                // Notification utilisateur (ex: un petit point rouge)
+            } else {
+                console.log('Sauvegarde automatique réussie.');
+                // Notification utilisateur (ex: un petit message vert)
+            }
+        };
+
+        // ----------------------------------------------------
+        // 🔹 GESTION DE L'ÉTAT ET DE L'INTERFACE UTILISATEUR
+        // ----------------------------------------------------
+
+        /**
+         * Met à jour l'interface (Modale, Profil, Contenu) en fonction de l'utilisateur.
+         * @param {Object | null} user - L'objet utilisateur Supabase ou null.
+         */
+        const handleAuthChange = (user) => {
+            if (user) {
+                // 1. Utilisateur connecté
+                authModal.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+                profileContainer.style.display = 'block';
+
+                // Mise à jour du profil
+                profileEmail.textContent = user.email || 'Utilisateur';
+                profileIcon.src = user.user_metadata.avatar_url || 'https://via.placeholder.com/40';
+
+                // Chargement de la progression
+                loadProgress(user.id);
+                
+                // Démarre la sauvegarde automatique (toutes les 5 secondes)
+                if (!saveTimer) {
+                    saveTimer = setInterval(() => {
+                        saveProgress(user.id, progressEditor.value);
+                    }, 5000);
+                }
+
+            } else {
+                // 2. Utilisateur déconnecté
+                authModal.classList.remove('hidden');
+                mainContent.classList.add('hidden');
+                profileContainer.style.display = 'none';
+
+                // Arrête la sauvegarde automatique
+                clearInterval(saveTimer);
+                saveTimer = null;
+
+                // Réinitialise le contenu localement pour simuler la "disparition du travail"
+                progressEditor.value = ''; 
+            }
+        };
+
+        // ----------------------------------------------------
+        // 🔹 ÉVÉNEMENTS
+        // ----------------------------------------------------
+
+        // A. Écoute de l'état d'authentification (pour le chargement initial et après redirection)
+        supabase.auth.onAuthStateChange((event, session) => {
+            // Utilise l'utilisateur de la session pour mettre à jour l'UI
+            handleAuthChange(session?.user);
+        });
+
+        // B. Clic sur le bouton de connexion Google dans la Modale
+        googleSignInButton.addEventListener('click', async () => {
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    // Important : redirige vers la page actuelle après la connexion
+                    redirectTo: window.location.origin + window.location.pathname
+                }
+            });
+            if (error) alert('Erreur connexion Google : ' + error.message);
+        });
+
+        // C. Clic sur l'icône de profil (pour ouvrir/fermer le menu)
+        profileIcon.addEventListener('click', () => {
+            profileMenu.classList.toggle('hidden');
+        });
+
+        // D. Clic sur le bouton de déconnexion
+        logoutButton.addEventListener('click', async () => {
+            profileMenu.classList.add('hidden'); // Ferme le menu immédiatement
+            
+            // Afficher le message avant la déconnexion
+            alert('Déconnexion en cours. Votre travail a été sauvegardé la dernière fois il y a moins de 5 secondes.'); 
+
+            const { error } = await supabase.auth.signOut();
+
+            if (error) {
+                alert('Erreur de déconnexion : ' + error.message);
+            } else {
+                // handleAuthChange(null) s'exécutera grâce à l'écouteur onAuthStateChange.
+                alert('Déconnexion réussie ! Vous pouvez vous reconnecter quand vous voulez.'); 
+            }
+        });
+
+        // E. Clic en dehors du menu de profil pour le fermer
+        document.addEventListener('click', (e) => {
+            if (!profileContainer.contains(e.target) && !profileMenu.classList.contains('hidden')) {
+                profileMenu.classList.add('hidden');
+            }
+        });
+
+    </script>
+</body>
+</html>
     <!-- Premium Section -->
 
 <section id="premium" class="py-20 relative z-10">
